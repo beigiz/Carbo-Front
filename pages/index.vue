@@ -26,12 +26,29 @@
 
 <script>
 import Logo from '~/components/Logo.vue'
-
 export default {
   components: {
     Logo
+  },
+  mounted(){
+    // if (process.browser) {
+      // let timeLine = this.$anime.timeline({
+      //   targets: '.title',
+      //   duration: 2000,
+      //   easing: 'spring',
+      //   loop: true,
+      //   delay: 500
+      // })
+      // timeLine.add({
+      //   translateX: 100,
+      // })
+      // .add({
+      //   translateX: 0
+      // })
+    // }
   }
 }
+  
 </script>
 
 <style>

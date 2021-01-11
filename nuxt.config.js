@@ -1,6 +1,11 @@
 
 export default {
-  mode: 'universal',
+  ssr: true,
+  target: 'server',
+  server: {
+    port: 3000, // default: 3000     
+    host: '0.0.0.0', // default: localhost   
+  },
   /*
   ** Headers of the page
   */
@@ -29,6 +34,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    "@/plugins/animeJs",
   ],
   /*
   ** Nuxt.js modules
@@ -43,6 +49,8 @@ export default {
   */
   axios: {
   },
+
+  buildModules: ['@nuxtjs/tailwindcss'],
   /*
   ** Build configuration
   */
