@@ -1,26 +1,12 @@
 <template>
   <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        landingPage
-      </h1>
-      <h2 class="subtitle">
-        My fabulous Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-      </div>
-    </div>
+    <!-- <div class="intro__background"></div> -->
+
+  <section>
+    <h1>Alpha Exchange</h1>
+    <h2>صرافـی آلفـا</h2>
+    <h3>بهترین قیمت در سریع ترین زمان ممکن</h3>
+  </section>
   </div>
 </template>
 
@@ -28,27 +14,67 @@
 import Logo from '~/components/Logo.vue'
 export default {
   components: {
-    Logo
+    Logo,
   },
-  mounted(){
-    // if (process.browser) {
+  created() {
+    if (process.client) {
+      document.addEventListener('DOMContentLoaded', function () {})
+
+      window.onload = (event) => {
+        console.log('page is fully loaded')
+      }
+    }
+  },
+  mounted() {
+    if (process.browser) {
+      
       // let timeLine = this.$anime.timeline({
-      //   targets: '.title',
-      //   duration: 2000,
-      //   easing: 'spring',
-      //   loop: true,
-      //   delay: 500
+      //   targets: '.intro__animated-line',
+      //   easing: 'spring(1, 80, 10, 0)',
+      //   loop: true
       // })
       // timeLine.add({
-      //   translateX: 100,
-      // })
+      //   width: '100%',
+      //   duration: 1000,
+      // }, 2000)
       // .add({
-      //   translateX: 0
-      // })
-    // }
-  }
+      //   targets: '.intro__animated-line',
+      //   translateY: '125px',
+      //   easing: 'easeInOutQuad',
+      //   duration: 1000,
+      // }, 3000)
+      // .add({
+      //   targets: '.intro__cover-box',
+      //   height: '0',
+      //   easing: 'easeInOutQuad',
+      //   duration: 1000,
+      // }, 3000)
+      // .add({
+      //   targets: '.intro__animated-line',
+      //   width: '0%',
+      //   easing: 'easeInOutQuad',
+      //   duration: 1000,
+      // }, 4000)
+      // .add({
+      //   targets: '.intro__background',
+      //   top: 0,
+      //   left: 0,
+      //   r: 10,
+      //   width: '100%',
+      //   height: '100vh',
+      //   //   rotate: {
+      //   //   value: 360,
+      //   //   duration: 1800,
+      //   //   easing: 'easeInOutSine'
+      //   // },
+      //   easing: 'easeInOutCirc',
+      //   duration: 1000,
+      // }, 500)
+
+    
+    }
+  },
 }
-  
 </script>
 
 <style>
@@ -57,7 +83,24 @@ export default {
   @apply min-h-screen flex justify-center items-center text-center mx-auto;
 }
 */
+
+
+h1 {
+  font-size: 36px;
+  font-weight: 800;
+}
+h2 {
+  font-size: 36px;
+  font-weight: 600;
+}
+
+h3{
+  font-size: 28px;
+  font-weight: 500;
+}
 .container {
+  background: rgb(222,168,144);
+background: linear-gradient(45deg, rgba(222,168,144,1) 0%, rgba(232,154,187,1) 50%, rgba(202,157,214,1) 100%);
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -67,8 +110,6 @@ export default {
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;

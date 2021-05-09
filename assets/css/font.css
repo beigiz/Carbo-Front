@@ -1,0 +1,152 @@
+/**
+*
+*	Name:			IRAN Sans-Serif Font
+*	Version:		5.0
+*	Author:			Moslem Ebrahimi (moslemebrahimi.com)
+*	Created on:		Dec 25, 2012
+*	Updated on:		Sep 01, 2017
+*	Website:		             http://fontiran.com
+*	Copyright:		Commercial/Proprietary Software
+--------------------------------------------------------------------------------------
+فونت های ایران سن سریف یک نرم افزار مالکیتی محسوب می شود. جهت آگاهی از قوانین استفاده از این فونت ها لطفا به وب سایت (فونت ایران دات کام) مراجعه نمایید
+--------------------------------------------------------------------------------------
+IRAN Sans-serif fonts are considered a proprietary software. To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com 
+--------------------------------------------------------------------------------------
+This set of fonts are used in this project under the license: (.....)
+--------------------------------------------------------------------------------------
+*	
+**/
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 900;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Black.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Black.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-Black.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-Black.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-Black.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: 800;
+  font-weight: bold;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-ExtraBold.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-ExtraBold.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-ExtraBold.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-ExtraBold.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-ExtraBold.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Bold.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Bold.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-Bold.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-Bold.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-Bold.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-SemiBold.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-SemiBold.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-SemiBold.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-SemiBold.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-SemiBold.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 500;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Medium.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Medium.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-Medium.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-Medium.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-Medium.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Regular.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Regular.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-Regular.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-Regular.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-Regular.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Light.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Light.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-Light.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-Light.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-Light.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 200;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-ExtraLight.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-ExtraLight.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-ExtraLight.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-ExtraLight.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-ExtraLight.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+  font-family: Kalameh;
+  font-style: normal;
+  font-weight: 100;
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Thin.eot');
+  src: url('../fonts/eot/KalamehWeb(FaNum)-Thin.eot?#iefix') format('embedded-opentype'),
+    /* IE6-8 */
+    url('../fonts/woff2/KalamehWeb(FaNum)-Thin.woff2') format('woff2'),
+    /* FF39+,Chrome36+, Opera24+*/
+    url('../fonts/woff/KalamehWeb(FaNum)-Thin.woff') format('woff'),
+    url('../fonts/ttf/Kalameh(FaNum)-Thin.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+
+*:not(i) {
+  font-family: Kalameh!important;
+  font-weight: 400;
+  font-size: 16px;
+}
