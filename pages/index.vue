@@ -1,11 +1,45 @@
 <template>
   <div class="container">
     <!-- <div class="intro__background"></div> -->
+  <nav class="g1-background my-4 mx-8 rounded-md">
+    <ul>
+      <li v-for="(link , i) in links" :key="i" class="p-2">{{link.name}}</li>
+    </ul>
+  </nav>
+  <section dir="rtl" class="main-section">
+    <div class="moto">
+        <h1>Alpha Exchange</h1>
+        <h2>صرافـی آلفـا</h2>
+        <h3>بهترین قیمت در سریع ترین زمان ممکن</h3>
+    </div>
+    <div class="flex justify-center items-center">
+      <div class="purchase-card shadow-lg p-4">
+        <h1>adsdasdsadsa</h1>
+      </div>
+    </div>
 
-  <section>
-    <h1>Alpha Exchange</h1>
-    <h2>صرافـی آلفـا</h2>
-    <h3>بهترین قیمت در سریع ترین زمان ممکن</h3>
+  </section>
+  <section class="features">
+    <div class="feature">
+      <img src="@/assets/img/rocket.png" alt="">
+      <h4 class="font-extrabold text-6xl">سریع معامله کنید</h4>
+    </div>
+
+    <div class="feature">
+      <img src="@/assets/img/rocket.png" alt="">
+      <h4 class="font-extrabold text-6xl">سریع معامله کنید</h4>
+    </div>
+
+    <div class="feature">
+      <img src="@/assets/img/rocket.png" alt="">
+      <h4 class="font-extrabold text-6xl">سریع معامله کنید</h4>
+    </div>
+
+  </section>
+  <section class="footer">
+    <div class="footer-card g1-background">
+
+    </div>
   </section>
   </div>
 </template>
@@ -15,6 +49,16 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo,
+  },
+  data() {
+    return {
+      links: [
+        {name: 'قوانین'},
+        {name: 'ویژگی‌ها'},
+        {name: 'تماس با ما'},
+        {name: 'خرید و فروش'}
+      ]
+    }
   },
   created() {
     if (process.client) {
@@ -77,55 +121,54 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
 /* Sample `apply` at-rules with Tailwind CSS
-.container {
-  @apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
 
 
-h1 {
-  font-size: 36px;
-  font-weight: 800;
-}
-h2 {
-  font-size: 36px;
-  font-weight: 600;
-}
+h1 
+  font-size: 36px
+  font-weight: 800
+h2 
+  font-size: 36px
+  font-weight: 600
 
-h3{
-  font-size: 28px;
-  font-weight: 500;
-}
-.container {
-  background: rgb(222,168,144);
-background: linear-gradient(45deg, rgba(222,168,144,1) 0%, rgba(232,154,187,1) 50%, rgba(202,157,214,1) 100%);
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+h3
+  font-size: 28px
+  font-weight: 500
 
-.title {
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+.main-section 
+  @apply flex justify-center items-center text-center mx-auto
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
+.features 
+  @apply flex justify-center items-center text-center mx-auto
+  .feature
+    img
+      width: 200px
+      margin: auto
+      z-index: 100
+    h4
+      @apply relative bottom-14
 
-.links {
-  padding-top: 15px;
-}
+
+nav
+  ul
+    li
+      display: inline-block
+
+.title 
+  display: block
+  font-weight: 300
+  font-size: 100px
+  color: #35495e
+  letter-spacing: 1px
+
+.subtitle 
+  font-weight: 300
+  font-size: 42px
+  color: #526488
+  word-spacing: 5px
+  padding-bottom: 15px
+
+.links 
+  padding-top: 15px
 </style>

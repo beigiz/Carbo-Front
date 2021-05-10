@@ -30,6 +30,7 @@ export default {
   css: [
     '~/assets/css/tailwind.css',
     '~/assets/css/font.css',
+    // '~/assets/css/iransans.css',
     '~/assets/app.sass'
   ],
   /*
