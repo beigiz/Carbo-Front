@@ -38,6 +38,10 @@ export default {
   */
   plugins: [
     "@/plugins/animeJs",
+    {
+      src: '@/plugins/vue-currency',
+      mode: 'client'
+    },
   ],
   /*
   ** Nuxt.js modules

@@ -1,6 +1,21 @@
 @import ./sections/intro
 
+body
+  @apply bg-gray-50
 
 .g1-background
   background: rgb(222,168,144)
   background: linear-gradient(45deg, rgba(222,168,144,1) 0%, rgba(232,154,187,1) 50%, rgba(202,157,214,1) 100%)
+
+html 
+  box-sizing: border-box
+
+
+.ex-btn
+  @apply rounded-md px-2 py-4
+
+.ex-input
+  label
+    @apply block uppercase tracking-wide text-right text-gray-700 text-xs font-bold mb-2
+  input
+    @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500
