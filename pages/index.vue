@@ -37,7 +37,7 @@
 
         <div class="flex mt-12">
           <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
-          <span class="text-lg final-price font-semibold">{{(tab == 'buy') ? usdt_amount * usdt_buy_price : usdt_amount * usdt_sell_price | currency}} </span> تومان </div>
+          <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div>
           <div class="flex-1">
             <button class="ex-btn w-full g1-background">مرحله بعد</button>
           </div>
@@ -107,72 +107,27 @@ export default {
   },
 
   methods: {
-    changeTab() {
-      let ts = document.getElementById('tab-switch')
-
-    },
   },
   mounted() {
     if (process.browser) {
 
 
-
-      // setTimeout(() => {
-        let preInvoiceAnime = lottie.loadAnimation({
-          container: document.getElementById('swapMoney-animation'), // the dom element that will contain the animation
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          animationData: this.swapMoney // the path to the animation json
-        })
-        preInvoiceAnime.play()
-      // }, 200)
-      
-      // let timeLine = this.$anime.timeline({
-      //   targets: '.intro__animated-line',
-      //   easing: 'spring(1, 80, 10, 0)',
-      //   loop: true
-      // })
-      // timeLine.add({
-      //   width: '100%',
-      //   duration: 1000,
-      // }, 2000)
-      // .add({
-      //   targets: '.intro__animated-line',
-      //   translateY: '125px',
-      //   easing: 'easeInOutQuad',
-      //   duration: 1000,
-      // }, 3000)
-      // .add({
-      //   targets: '.intro__cover-box',
-      //   height: '0',
-      //   easing: 'easeInOutQuad',
-      //   duration: 1000,
-      // }, 3000)
-      // .add({
-      //   targets: '.intro__animated-line',
-      //   width: '0%',
-      //   easing: 'easeInOutQuad',
-      //   duration: 1000,
-      // }, 4000)
-      // .add({
-      //   targets: '.intro__background',
-      //   top: 0,
-      //   left: 0,
-      //   r: 10,
-      //   width: '100%',
-      //   height: '100vh',
-      //   //   rotate: {
-      //   //   value: 360,
-      //   //   duration: 1800,
-      //   //   easing: 'easeInOutSine'
-      //   // },
-      //   easing: 'easeInOutCirc',
-      //   duration: 1000,
-      // }, 500)
+    let preInvoiceAnime = lottie.loadAnimation({
+      container: document.getElementById('swapMoney-animation'), // the dom element that will contain the animation
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: this.swapMoney // the path to the animation json
+    })
+    preInvoiceAnime.play()
 
     
     }
+  },
+  computed: {
+    final_price() {
+      return (this.tab == 'buy') ? this.usdt_amount * this.usdt_buy_price : this.usdt_amount * this.usdt_sell_price 
+    },
   },
 }
 </script>
