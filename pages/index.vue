@@ -1,12 +1,14 @@
 <template>
-  <div class="container">
+  <div class="">
     <!-- <div class="intro__background"></div> -->
-  <nav class="g1-background my-4 mx-8 rounded-md">
-    <ul>
-      <li v-for="(link , i) in links" :key="i" class="p-2">{{link.name}}</li>
+  <nav class="my-4 mx-8 p-4 flex items-center">
+    <ul class="flex-1 bg-white mr-4 px-4 shadow-sm py-2 rounded-md">
+      <li v-for="(link , i) in links" :key="i" class="py-2 px-4">{{link.name}}</li>
     </ul>
+    <div class=""><img src="@/assets/img/logo.png" alt=""></div>
   </nav>
-  <section dir="rtl" class="main-section">
+  <section dir="rtl" class="main-section px-24">
+
     <div class="moto flex justify-center items-center flex-1 flex-col">
         <div id="swapMoney-animation"></div>
         <div class="moto-text">
@@ -16,6 +18,7 @@
     </div>
 
     <div class="flex justify-center p-8 items-center flex-1">
+      
       <div class="purchase-card bg-white shadow-xl p-8 w-full rounded-lg">
 
           <div dir="ltr" class="wrapper">
@@ -39,7 +42,7 @@
           <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
           <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div>
           <div class="flex-1">
-            <button class="ex-btn w-full g1-background">مرحله بعد</button>
+            <button class="ex-btn w-full bg-g2">مرحله بعد</button>
           </div>
         </div>
 
@@ -66,7 +69,7 @@
 
   </section>
   <section class="footer">
-    <div class="footer-card g1-background">
+    <div class="footer-card bg-g1">
 
     </div>
   </section>
@@ -89,9 +92,11 @@ export default {
       usdt_buy_price: 23850,
       usdt_sell_price: 23500,
       links: [
-        {name: 'قوانین'},
+        
         {name: 'ویژگی‌ها'},
         {name: 'تماس با ما'},
+        {name: 'درباره کربو'},
+        {name: 'چگونه خرید و فروش کنیم؟'},
         {name: 'خرید و فروش'}
       ]
     }
@@ -151,8 +156,7 @@ h3
   @apply flex justify-center items-center text-center mx-auto
   #swapMoney-animation
     width: 75%
-  .price-box
-    background-image: linear-gradient(45deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)
+
 
 .features 
   @apply flex flex-col lg:flex-row items-center text-center mx-auto justify-around
@@ -171,6 +175,8 @@ h3
       text-align: right
 
 nav
+  img
+    width: 75px
   ul
     li
       display: inline-block
@@ -256,10 +262,10 @@ nav
 
 .moto
   position: relative
-  bottom: 4rem
+  bottom: 2rem
   .moto-text
     position: relative
-    bottom: 1rem
+    bottom: 2rem
 
 
 
