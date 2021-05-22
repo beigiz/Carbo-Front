@@ -35,14 +35,14 @@
         <template v-if="currentState == currentStateEnum.TETHER_AMOUNT">
           <div class="w-full ex-input">
             <label class="">مقدار تتر درخواستی</label>
-            <input v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی را وارد کنید">
+            <input @keyup.enter="submitTetherRequest" v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی را وارد کنید">
           </div>
 
           <div class="flex mt-12">
             <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
             <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div>
             <div class="flex-1">
-              <button class="ex-btn w-full bg-g2" @click="submitTetherRequest">مرحله بعد</button>
+              <button class="ex-btn w-full bg-g2" @click="submitTetherRequest">{{ isAuthenticated ? 'ثبت درخواست' : 'مرحله بعد'}}</button>
             </div>
           </div>
         </template>
@@ -50,7 +50,7 @@
         <template v-else-if="currentState == currentStateEnum.PHONE_NUMBER">
           <div class="w-full ex-input">
             <label class="">شماره همراه</label>
-            <input v-model="phone_number" class="" id="grid-password" inputmode="numeric" placeholder="شماره تلفن را وارد کنید">
+            <input @keyup.enter="sendCode" v-model="phone_number" class="" id="grid-password" inputmode="numeric" placeholder="شماره تلفن را وارد کنید">
           </div>
 
           <div class="flex mt-12">
@@ -66,12 +66,12 @@
         <template v-else>
           <div class="w-full ex-input">
             <label class="">کد تایید</label>
-            <input v-model="user_code" class="" id="grid-password" inputmode="numeric" placeholder="12345">
+            <input @keyup.enter="checkCode" v-model="user_code" class="" id="grid-password" inputmode="numeric" placeholder="12345">
           </div>
 
           <div class="flex mt-12">
             <div class="flex-1">
-              <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.PHONE_NUMBER">مرحله قبل</button>
+              <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.PHONE_NUMBER">ویرایش شماره</button>
             </div>
             <div class="flex-1">
               <button class="ex-btn w-full bg-g2" @click="checkCode">تایید</button>
@@ -173,7 +173,7 @@ export default {
       let validation = /^(\0|0)?9\d{9}$/g
       if (phone_numberEn.match(validation)) {
         this.$axios
-          .post('/api/v1/user-profile/send-code/', {
+          .post('v1/user_profile/send-code/', {
             phone_number: phone_numberEn
           })
           .then(res => {
@@ -194,7 +194,7 @@ export default {
 
     checkCode() {
       this.$axios
-        .post('/api/v1/user-profile/auth-token/', {
+        .post('v1/user_profile/verify-code/', {
           phone_number: this.convertPersian(this.phone_number),
           code: this.convertPersian(this.user_code)
         })

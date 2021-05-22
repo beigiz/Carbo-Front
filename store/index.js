@@ -26,9 +26,13 @@ export const mutations = {
         const cookieValObject = {'token': `${token}`}
         // Works client side only
         const getDomainName = function() {
-            let hostName = window.location.host;
+            let hostName = window.location.hostname;
+            if(hostName == 'localhost' || Number(hostName.split('.')[0]) != NaN) {
+                return hostName
+            }
             return hostName.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
         }
+        alert(getDomainName())
         this.$cookies.set('CarboExchangeUserToken', cookieValObject, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7,
@@ -50,9 +54,9 @@ export const mutations = {
 export const actions = {
   async nuxtServerInit({ commit }, { req, $config }) {
     let token = this.$cookies.get('CarboExchangeUserToken')
-    if (!!token) store.commit('setTokenWithoutSaveToCookie', token.token)
+    if (!!token) commit('setTokenWithoutSaveToCookie', token.token)
       
-    let tetherPrice = (await this.$axios.get('/api/v1/core/trading-pair/usdt/irt/?format=json')).data
+    let tetherPrice = (await this.$axios.get('v1/core/trading-pair/usdt/irt/?format=json')).data
     // console.log(tetherPrice)
     commit('setTetherPrice', tetherPrice)
     commit('setLoadingTetherPrice', false)

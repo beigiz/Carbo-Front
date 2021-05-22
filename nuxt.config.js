@@ -1,16 +1,17 @@
+require('dotenv').config()
 
 export default {
   ssr: true,
   target: 'server',
   server: {
-    port: 3000, // default: 3000     
-    host: '0.0.0.0', // default: localhost   
+    port: process.env.CARBO_EXCHANGE_NUXT_PORT, // default: 3000
+    host: process.env.CARBO_EXCHANGE_NUXT_HOST, // default: localhost
   },
   /*
   ** Headers of the page
   */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Carbo Exchange',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -48,6 +49,7 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/proxy',
     'cookie-universal-nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
@@ -57,9 +59,19 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: process.env.CARBO_EXCHANGE_baseUrl,
+    proxyHeaders: false,
+    credentials: false
   },
 
-  buildModules: ['@nuxtjs/tailwindcss'],
+  // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
+  buildModules: [
+    '@nuxtjs/tailwindcss',
+    [ '@nuxtjs/dotenv', {
+      systemvars: true
+    }]
+  ],
+
   /*
   ** Build configuration
   */
@@ -74,5 +86,15 @@ export default {
     */
     extend(config, ctx) {
     }
-  }
+  },
+
+
+  proxy: process.env.CARBO_EXCHANGE_proxyUrl ? {
+    '/api/': {
+      target: process.env.CARBO_EXCHANGE_proxyUrl,
+      // pathRewrite: {
+      //   '^/api' : '/'
+      //   }
+      }
+  } : null
 }
