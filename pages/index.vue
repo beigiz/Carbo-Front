@@ -30,7 +30,7 @@
 
 
           <div class="price-box rounded-md p-4 my-4 text-lg">
-           <span>{{(tab == 'buy') ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl">{{(tab == 'buy') ? usdt_buy_price : usdt_sell_price | currency}}</span> <span class="toman">تومان</span>
+           <span>{{(tab == 'buy') ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(tab == 'buy') ? tetherPrice.buy_price : tetherPrice.sell_price | currency}}</span> <span class="toman">تومان</span>
           </div>
 
         <div class="w-full ex-input">
@@ -81,6 +81,17 @@ import Logo from '~/components/Logo.vue'
 import lottie from 'lottie-web'
 import swapMoney from '~/assets/img/43059-bitcoin-trade.json'
 export default {
+  computed: {
+    tetherPrice(){
+      return this.$store.getters.tetherPrice;
+    },
+    final_price() {
+      if(!this.tetherPrice) {
+        return 0
+      }
+      return (this.tab == 'buy') ? this.usdt_amount * this.tetherPrice.buy_price : this.usdt_amount * this.tetherPrice.sell_price 
+    },
+  },
   components: {
     Logo,
   },
@@ -128,11 +139,6 @@ export default {
 
     
     }
-  },
-  computed: {
-    final_price() {
-      return (this.tab == 'buy') ? this.usdt_amount * this.usdt_buy_price : this.usdt_amount * this.usdt_sell_price 
-    },
   },
 }
 </script>
