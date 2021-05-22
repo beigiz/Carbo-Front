@@ -52,7 +52,7 @@ export const actions = {
     let token = this.$cookies.get('CarboExchangeUserToken')
     if (!!token) store.commit('setTokenWithoutSaveToCookie', token.token)
       
-    let tetherPrice = (await this.$axios.get('https://carbo.exchange/api/v1/core/trading-pair/usdt/irt/?format=json')).data
+    let tetherPrice = (await this.$axios.get('/api/v1/core/trading-pair/usdt/irt/?format=json')).data
     // console.log(tetherPrice)
     commit('setTetherPrice', tetherPrice)
     commit('setLoadingTetherPrice', false)

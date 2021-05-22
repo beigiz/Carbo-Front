@@ -19,7 +19,7 @@
 
     <div class="flex justify-center p-8 items-center flex-1">
       
-      <div class="purchase-card bg-white shadow-xl p-8 w-full rounded-lg" v-if="currentState == currentStateEnum.TETHER_AMOUNT">
+      <div class="purchase-card bg-white shadow-xl p-8 w-full rounded-lg">
 
           <div dir="ltr" class="wrapper">
             <div id="tab-switch" class="e-tab-switch text-gray-800 text-center" :class="{'left': tab == 'buy', 'left': tab == 'sell'}">
@@ -32,21 +32,52 @@
           <div class="price-box rounded-md p-4 my-4 text-lg">
            <span>{{(tab == 'buy') ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(tab == 'buy') ? tetherPrice.buy_price : tetherPrice.sell_price | currency}}</span> <span class="toman">تومان</span>
           </div>
-
-        <div class="w-full ex-input">
-          <label class="">مقدار تتر درخواستی</label>
-          <input v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی را وارد کنید">
-        </div>
-
-        <div class="flex mt-12">
-          <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
-          <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div>
-          <div class="flex-1">
-            <button class="ex-btn w-full bg-g2">مرحله بعد</button>
+        <template v-if="currentState == currentStateEnum.TETHER_AMOUNT">
+          <div class="w-full ex-input">
+            <label class="">مقدار تتر درخواستی</label>
+            <input v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی را وارد کنید">
           </div>
-        </div>
 
+          <div class="flex mt-12">
+            <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
+            <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div>
+            <div class="flex-1">
+              <button class="ex-btn w-full bg-g2" @click="submitTetherRequest">مرحله بعد</button>
+            </div>
+          </div>
+        </template>
 
+        <template v-else-if="currentState == currentStateEnum.PHONE_NUMBER">
+          <div class="w-full ex-input">
+            <label class="">شماره همراه</label>
+            <input v-model="phone_number" class="" id="grid-password" inputmode="numeric" placeholder="شماره تلفن را وارد کنید">
+          </div>
+
+          <div class="flex mt-12">
+            <div class="flex-1">
+              <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.TETHER_AMOUNT">مرحله قبل</button>
+            </div>
+            <div class="flex-1">
+              <button class="ex-btn w-full bg-g2" @click="sendCode">ارسال کد تایید</button>
+            </div>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="w-full ex-input">
+            <label class="">کد تایید</label>
+            <input v-model="user_code" class="" id="grid-password" inputmode="numeric" placeholder="12345">
+          </div>
+
+          <div class="flex mt-12">
+            <div class="flex-1">
+              <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.PHONE_NUMBER">مرحله قبل</button>
+            </div>
+            <div class="flex-1">
+              <button class="ex-btn w-full bg-g2" @click="checkCode">تایید</button>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -87,9 +118,6 @@ const currentStateEnum = Object.freeze({
 })
 export default {
   computed: {
-    isAuthenticated(){
-      return this.$store.getters.isAuthenticated
-    },
     tetherPrice(){
       return this.$store.getters.tetherPrice;
     },
@@ -105,6 +133,8 @@ export default {
   },
   data() {
     return {
+      phone_number: '',
+      user_code: '',
       currentStateEnum,
       currentState: currentStateEnum.TETHER_AMOUNT,
       swapMoney,
@@ -133,6 +163,55 @@ export default {
   },
 
   methods: {
+    submitTetherRequest(){
+      if(!this.isAuthenticated) {
+        this.currentState = currentStateEnum.PHONE_NUMBER
+      }
+    },
+    sendCode() {
+      let phone_numberEn = this.convertPersian(this.phone_number)
+      let validation = /^(\0|0)?9\d{9}$/g
+      if (phone_numberEn.match(validation)) {
+        this.$axios
+          .post('/api/v1/user-profile/send-code/', {
+            phone_number: phone_numberEn
+          })
+          .then(res => {
+            this.currentState = currentStateEnum.OTP
+            this.user_code = res.data.code
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else if (phone_numberEn == '') {
+        // phone number empty
+        alert('لطفا یک شماره معتبر وارد کنید')
+      } else {
+        // phone number invalid
+        alert('لطفا یک شماره معتبر وارد کنید')
+      }
+    },
+
+    checkCode() {
+      this.$axios
+        .post('/api/v1/user-profile/auth-token/', {
+          phone_number: this.convertPersian(this.phone_number),
+          code: this.convertPersian(this.user_code)
+        })
+        .then(res => {
+          this.$store.commit('setToken', res.data.token)
+          this.currentState = currentStateEnum.TETHER_AMOUNT
+          this.submitTetherRequest()
+        })
+        .catch(err => {
+          if (err.response) {
+            console.log(err.response)
+            if (err.response.status == 403) {
+              alert('کد وارد شده نادرست است')
+            }
+          }
+        })
+    },
   },
   mounted() {
     if (process.browser) {
