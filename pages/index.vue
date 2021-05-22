@@ -19,7 +19,7 @@
 
     <div class="flex justify-center p-8 items-center flex-1">
       
-      <div class="purchase-card bg-white shadow-xl p-8 w-full rounded-lg">
+      <div class="purchase-card bg-white shadow-xl p-8 w-full rounded-lg" v-if="currentState == currentStateEnum.TETHER_AMOUNT">
 
           <div dir="ltr" class="wrapper">
             <div id="tab-switch" class="e-tab-switch text-gray-800 text-center" :class="{'left': tab == 'buy', 'left': tab == 'sell'}">
@@ -80,8 +80,16 @@
 import Logo from '~/components/Logo.vue'
 import lottie from 'lottie-web'
 import swapMoney from '~/assets/img/43059-bitcoin-trade.json'
+const currentStateEnum = Object.freeze({
+  TETHER_AMOUNT: 0,
+  PHONE_NUMBER: 1,
+  OTP: 2,
+})
 export default {
   computed: {
+    isAuthenticated(){
+      return this.$store.getters.isAuthenticated
+    },
     tetherPrice(){
       return this.$store.getters.tetherPrice;
     },
@@ -97,6 +105,8 @@ export default {
   },
   data() {
     return {
+      currentStateEnum,
+      currentState: currentStateEnum.TETHER_AMOUNT,
       swapMoney,
       tab: 'buy',
       usdt_amount: null,
