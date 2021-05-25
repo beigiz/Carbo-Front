@@ -197,7 +197,7 @@
             <template v-else>
               <div>پشتیبانی واتساپ</div>
             </template>
-            <div class="mt-4"><a href="https://wa.me/+989120350075" style="color: blue; text-decoration: underline; font-size: 18px;">09120350075</a></div>
+            <div class="mt-4"><a href="https://wa.me/+989120350075" target="_blank" style="color: blue; text-decoration: underline; font-size: 18px;">09120350075</a></div>
           </div>
         </template>
       </div>
@@ -332,6 +332,11 @@ export default {
     startTetherRequest(){
       if(!this.toman_amount) {
         alert('لطفا مقدار درخواستی را وارد کنید')
+        return
+      }
+      if(this.ExchangeRequestType = ExchangeRequestTypeEnum.BUY && this.usdt_amount > 1000){
+        alert('حداکثر 1000 تتر قابل خرید می باشد')
+        return
       }
       if(!this.isAuthenticated) {
         this.currentState = currentStateEnum.PHONE_NUMBER
