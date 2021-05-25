@@ -17,65 +17,187 @@
         </div>
     </div>
 
-    <div class="flex justify-center p-8 items-center flex-1">
+    <div class="flex justify-center px-8 pb-8 items-center flex-1">
       
       <div class="purchase-card bg-white shadow-xl p-8 w-full rounded-lg">
 
           <div dir="ltr" class="wrapper">
-            <div id="tab-switch" class="e-tab-switch text-gray-800 text-center" :class="{'left': tab == 'buy', 'left': tab == 'sell'}">
-              <div class="e-tab" @click="tab = 'buy'" :class="{'active': tab == 'buy'}" >میخواهم تتر بخرم</div><!--
-          --><div class="e-tab" @click="tab = 'sell'" :class="{'active': tab == 'sell'}" >میخواهم تترم را بفروشم</div>
+            <div id="tab-switch" class="e-tab-switch text-gray-800 text-center" :class="{'left': ExchangeRequestType == ExchangeRequestTypeEnum.BUY, 'left': ExchangeRequestType == ExchangeRequestTypeEnum.SELL}">
+              <div class="e-tab" @click="ExchangeRequestType = ExchangeRequestTypeEnum.BUY" :class="{'active': ExchangeRequestType == ExchangeRequestTypeEnum.BUY}" >میخواهم تتر بخرم</div><!--
+          --><div class="e-tab" @click="ExchangeRequestType = ExchangeRequestTypeEnum.SELL" :class="{'active': ExchangeRequestType == ExchangeRequestTypeEnum.SELL}" >میخواهم تترم را بفروشم</div>
             </div>
           </div>
 
-
-          <div class="price-box rounded-md p-4 my-4 text-lg">
-           <span>{{(tab == 'buy') ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(tab == 'buy') ? tetherPrice.buy_price : tetherPrice.sell_price | currency}}</span> <span class="toman">تومان</span>
-          </div>
         <template v-if="currentState == currentStateEnum.TETHER_AMOUNT">
-          <div class="w-full ex-input">
-            <label class="">مقدار تتر درخواستی</label>
-            <input @keyup.enter="submitTetherRequest" v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی را وارد کنید">
+          <div class="price-box rounded-md p-4 my-4 text-lg">
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
           </div>
+
+          <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
+            <div class="w-full ex-input">
+              <label class="">می دهید (تومان)</label>
+              <input @keyup.enter="startTetherRequest" @keyup="tomanAmountUpdated" v-model="toman_amount" class="" id="grid-password" inputmode="numeric" placeholder="مبلغ">
+            </div>
+            <div class="w-full ex-input">
+              <label class="">می گیرید (تتر)</label>
+              <input @keyup.enter="startTetherRequest" @keyup="tetherAmountUpdated" v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی">
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="w-full ex-input">
+              <label class="">می دهید (تتر)</label>
+              <input @keyup.enter="startTetherRequest" @keyup="tetherAmountUpdated" v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر">
+            </div>
+            <div class="w-full ex-input">
+              <label class="">می گیرید (تومان)</label>
+              <input @keyup.enter="startTetherRequest" @keyup="tomanAmountUpdated" v-model="toman_amount" class="" id="grid-password" inputmode="numeric" placeholder="مبلغ درخواستی">
+            </div>
+          </template>
 
           <div class="flex mt-12">
-            <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
-            <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div>
+            <!-- <div class="flex-1 flex justify-start items-end"><span>مبلغ نهایی:</span> 
+            <span class="text-lg final-price font-semibold">{{ final_price | currency}} </span> تومان </div> -->
             <div class="flex-1">
-              <button class="ex-btn w-full bg-g2" @click="submitTetherRequest">{{ isAuthenticated ? 'ثبت درخواست' : 'مرحله بعد'}}</button>
+              <button class="ex-btn w-full bg-g2" @click="startTetherRequest">مرحله بعد</button>
             </div>
           </div>
         </template>
 
         <template v-else-if="currentState == currentStateEnum.PHONE_NUMBER">
+          <div class="price-box rounded-md p-4 my-4 text-lg">
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+          </div>
+
           <div class="w-full ex-input">
             <label class="">شماره همراه</label>
             <input @keyup.enter="sendCode" v-model="phone_number" class="" id="grid-password" inputmode="numeric" placeholder="شماره تلفن را وارد کنید">
           </div>
 
           <div class="flex mt-12">
-            <div class="flex-1">
+            <div class="flex-1 m-1">
               <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.TETHER_AMOUNT">مرحله قبل</button>
             </div>
-            <div class="flex-1">
+            <div class="flex-1 m-1">
               <button class="ex-btn w-full bg-g2" @click="sendCode">ارسال کد تایید</button>
             </div>
           </div>
         </template>
 
-        <template v-else>
+        <template v-else-if="currentState == currentStateEnum.OTP">
+          <div class="price-box rounded-md p-4 my-4 text-lg">
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+          </div>
+
           <div class="w-full ex-input">
             <label class="">کد تایید</label>
             <input @keyup.enter="checkCode" v-model="user_code" class="" id="grid-password" inputmode="numeric" placeholder="12345">
           </div>
 
           <div class="flex mt-12">
-            <div class="flex-1">
+            <div class="flex-1 m-1">
               <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.PHONE_NUMBER">ویرایش شماره</button>
             </div>
-            <div class="flex-1">
+            <div class="flex-1 m-1">
               <button class="ex-btn w-full bg-g2" @click="checkCode">تایید</button>
             </div>
+          </div>
+        </template>
+
+        <template v-else-if="currentState == currentStateEnum.ENTER_ACCOUNT_INFO">
+
+          <div class="price-box rounded-md p-4 my-4 text-lg">
+            <span> قیمت فروش به ما</span> <span class="font-semibold text-xl" v-if="tetherPrice">{{ tetherPrice.buy_price }}</span> <span class="toman">تومان</span>
+            <br />
+            <span>شما <span style="color: green">{{ usdt_amount }}</span> تتر می دهید و <span style="color: green">{{ toman_amount }}</span> تومان می گیرید</span>
+          </div>
+
+          <div class="w-full ex-input">
+            <label class="">شماره کارت</label>
+            <input @keyup.enter="submitAccountInfo" v-model="userProfileToEdit.card_number" class="" id="grid-password" placeholder="شماره کارت">
+            <label class="">نام صاحب حساب</label>
+            <input @keyup.enter="submitAccountInfo" v-model="userProfileToEdit.first_name" class="" id="grid-password" placeholder="نام و نام خانوادگی صاحب حساب">
+          </div>
+
+          <div class="flex mt-12">
+            <div class="flex-1 m-1">
+              <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.TETHER_AMOUNT">بازگشت</button>
+            </div>
+            <div class="flex-1 m-1">
+              <button class="ex-btn w-full bg-g2" @click="submitAccountInfo">مرحله بعد</button>
+            </div>
+          </div>
+        </template>
+
+        <template v-else-if="currentState == currentStateEnum.ENTER_REQUEST_INFO">
+          
+          <div class="price-box rounded-md p-4 mt-4 text-lg">
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+            <br />
+            <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
+              <span>شما <span style="color: green">{{ toman_amount }}</span> تومان می دهید و <span style="color: green">{{ usdt_amount }}</span> تتر می گیرید</span>
+            </template>
+            <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.SELL">
+              <span style="font-size: 13px;">شما <span style="color: green">{{ usdt_amount }}</span> تتر می دهید و <span style="color: green">{{ toman_amount }}</span> تومان می گیرید</span>
+            </template>
+          </div>
+
+          <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
+            <div class="w-full ex-input">
+              <label class="">آدرس  کیف پول</label>
+              <input @keyup.enter="submitTetherRequestInfo" v-model="usdtWalletAddress" class="" id="grid-password" placeholder="آدرس واریز TRC20">
+              <div class="px-4 pt-2" style="color: #777777; font-size: 14px;">
+                کارمزد انتقال تتر TRC20 برابر با 1 USDT است که مربوط به شبکه بلاک چین بوده و کربو ذی‌تفغ نمی باشد
+              </div>
+            </div>
+          </template>
+
+          <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.SELL">
+            <div class="px-4">
+              لطفا {{ usdt_amount }} تتر TRC20 به کیف پول زیر ارسال نمایید
+              <br />
+              <span style="color: #CC0000;">مقدار تتر ارسالی، بعد از کسر کارمزد می باشد</span>
+            </div>
+            <div class="w-full ex-input pt-4" @click="copyWalletAddressToClipboard">
+              <label class="">آدرس کیف پول <span style="text-decoration: underline; font-weight: bold; font-size: 13px">(کپی کردن)</span></label>
+              <input class="my-2" id="ourWalletAddress" disabled type="text" value="THRmd715Zo4NYXF8CvPDZ8rvTkftk2wGfw" style="text-align: center;">
+            </div>
+            <div class="px-4 pt-4">
+              سپس txId تراکنش را در کادر زیر وارد کنید.
+            </div>
+            <div class="w-full ex-input">
+              <label class="">کد txId</label>
+              <input @keyup.enter="submitTetherRequestInfo" v-model="txId" class="" id="grid-password" placeholder="txId تراکنش">
+            </div>
+          </template>
+
+          <div class="flex mt-6">
+            <div class="flex-1 m-1">
+              <button class="ex-btn w-full bg-g2" @click="currentState = currentStateEnum.TETHER_AMOUNT">مرحله قبل</button>
+            </div>
+            <div class="flex-1 m-1">
+              <button class="ex-btn w-full bg-g2" @click="submitTetherRequestInfo">ثبت درخواست</button>
+            </div>
+          </div>
+        </template>
+
+        <template v-else-if="currentState == currentStateEnum.FINISHED">
+          
+          <div class="price-box rounded-md px-4 pt-4 my-4 text-lg">
+            درخواست شما با موفقیت ثبت شد!
+          </div>
+          <div class="px-12">
+            <div>کد رهگیری شما</div>
+            <div class="pb-4 text-lg" style="letter-spacing: 3px; font-weight: 500; color: green;">{{ exchangeRequestResult.ref_code }}</div>
+            <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
+              <div>لطفا مبلغ <span style="color: #004400">{{ toman_amount }}</span> تومان به شماره کارت </div>
+              <div class="my-2 text-lg">5022-2910-9198-2353</div>
+              <div>به نام امیرحسین کرمی واریز نموده و رسید پرداخت را به همراه کد رهگیری به واتساپ این شماره ارسال کنید</div>
+            </template>
+            <template v-else>
+              <div>پشتیبانی واتساپ</div>
+            </template>
+            <div class="mt-4"><a href="https://wa.me/+989120350075" style="color: blue; text-decoration: underline; font-size: 18px;">09120350075</a></div>
           </div>
         </template>
       </div>
@@ -105,7 +227,7 @@
     </div>
   </section>
   </div>
-</template>
+</template>۱
 
 <script>
 import Logo from '~/components/Logo.vue'
@@ -115,9 +237,32 @@ const currentStateEnum = Object.freeze({
   TETHER_AMOUNT: 0,
   PHONE_NUMBER: 1,
   OTP: 2,
+  ENTER_ACCOUNT_INFO: 3,
+  ENTER_REQUEST_INFO: 4,
+  VERIFY_REQUEST: 5,
+  FINISHED: 6
+})
+const ExchangeRequestTypeEnum = Object.freeze({
+  BUY: 0,
+  SELL: 1
+})
+const LastChangedInputEnum = Object.freeze({
+  USDT: 0,
+  IRT: 1
 })
 export default {
+  watch: {
+    ExchangeRequestType(_newValue, _oldValue) {
+      this.resetComponent()
+    },
+    userProfile(newValue, _oldValue) {
+      this.userProfileToEdit = Object.assign({}, newValue)
+    }
+  },
   computed: {
+    userProfile(){
+      return this.$store.getters.userProfile
+    },
     tetherPrice(){
       return this.$store.getters.tetherPrice;
     },
@@ -125,7 +270,7 @@ export default {
       if(!this.tetherPrice) {
         return 0
       }
-      return (this.tab == 'buy') ? this.usdt_amount * this.tetherPrice.buy_price : this.usdt_amount * this.tetherPrice.sell_price 
+      return (this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? this.usdt_amount * this.tetherPrice.sell_price : this.usdt_amount * this.tetherPrice.buy_price 
     },
   },
   components: {
@@ -133,15 +278,22 @@ export default {
   },
   data() {
     return {
-      phone_number: '',
-      user_code: '',
+      userProfileToEdit: null,
+      ExchangeRequestTypeEnum,
       currentStateEnum,
       currentState: currentStateEnum.TETHER_AMOUNT,
       swapMoney,
-      tab: 'buy',
-      usdt_amount: null,
-      usdt_buy_price: 23850,
-      usdt_sell_price: 23500,
+      ExchangeRequestType: ExchangeRequestTypeEnum.BUY,
+      exchangeRequestResult: null,
+
+      usdtWalletAddress: '',
+      phone_number: '',
+      user_code: '',
+      lastChangedInput: null,
+      usdt_amount: '',
+      toman_amount: '',
+      txId: '',
+
       links: [
         
         {name: 'ویژگی‌ها'},
@@ -163,10 +315,121 @@ export default {
   },
 
   methods: {
-    submitTetherRequest(){
+    copyWalletAddressToClipboard(){
+      /* Get the text field */
+      var copyText = document.getElementById("ourWalletAddress");
+
+      copyText.removeAttribute('disabled');
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+      /* Copy the text inside the text field */
+      document.execCommand("copy");
+      copyText.setAttribute('disabled', true);
+
+      /* Alert the copied text */
+      alert('در کلیپ بورد کپی شد');
+    },
+    startTetherRequest(){
+      if(!this.toman_amount) {
+        alert('لطفا مقدار درخواستی را وارد کنید')
+      }
       if(!this.isAuthenticated) {
         this.currentState = currentStateEnum.PHONE_NUMBER
+      } else {
+        if (this.ExchangeRequestType == this.ExchangeRequestTypeEnum.BUY) {
+          this.currentState = currentStateEnum.ENTER_REQUEST_INFO
+        } else {
+          this.currentState = currentStateEnum.ENTER_ACCOUNT_INFO
+        }
       }
+    },
+    submitAccountInfo(){
+      if(!this.userProfileToEdit.card_number){
+        alert('لطفا شماره کارت را وارد کنید')
+        return
+      }
+      if(!this.userProfileToEdit.first_name){
+        alert('لطفا نام صاحب حساب را وارد کنید')
+        return
+      }
+      if(this.userProfile.first_name == this.userProfileToEdit.first_name
+        && this.userProfile.card_number == this.userProfileToEdit.card_number){
+        this.currentState = currentStateEnum.ENTER_REQUEST_INFO
+        return
+      }
+      this.$axios
+        .patch('v1/user_profile/user-profile/', {
+          card_number: this.userProfileToEdit.card_number,
+          first_name: this.userProfileToEdit.first_name
+        },{
+          headers: {
+              Authorization: 'Token ' + this.$store.getters.token
+          }
+        })
+        .then(res => {
+          this.$store.commit('setUserProfile', res.data)
+          this.currentState = currentStateEnum.ENTER_REQUEST_INFO
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    submitTetherRequestInfo(){
+      if(this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY) {
+        if(!this.usdtWalletAddress) {
+          alert('لطفا آدرس کیف پول را وارد کنید')
+          return
+        }
+      }
+      if(this.ExchangeRequestType == ExchangeRequestTypeEnum.SELL) {
+        if(!this.txId) {
+          alert('لطفا txId تراکنش را وارد کنید')
+          return
+        }
+      }
+      let data = {
+        trading_pair: this.tetherPrice.pk,
+        from_amount: Number(this.toman_amount.replaceAll(',', '')),
+        to_amount: this.usdt_amount,
+        type: this.ExchangeRequestType,
+        description: this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.usdtWalletAddress : this.txId
+      }
+      this.$axios
+        .post('v1/core/exchange/request/create/', data,{
+          headers: {
+              Authorization: 'Token ' + this.$store.getters.token
+          }
+        })
+        .then(res => {
+          this.exchangeRequestResult = res.data
+          this.currentState = currentStateEnum.FINISHED
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    resetComponent(){
+      this.currentState = currentStateEnum.TETHER_AMOUNT
+      this.usdtWalletAddress = '';
+      this.phone_number = '';
+      this.user_code = '';
+      this.lastChangedInput = null;
+      this.usdt_amount = '';
+      this.toman_amount = '';
+      this.txId = '';
+    },
+    tomanAmountUpdated(){
+        const num = this.toEnglishNumber(String(this.toman_amount));
+        this.toman_amount = this.priceFormat(num);
+        let str = String(Number(num) / Number(this.tetherPrice.sell_price))
+        this.usdt_amount = Number(this.cutNDigitAfterPrecision(str, 2));
+        this.lastChangedInput = LastChangedInputEnum.IRT
+    },
+    tetherAmountUpdated(){
+        let str = String(this.usdt_amount)
+        this.usdt_amount = Number(this.cutNDigitAfterPrecision(str, 2));
+        this.toman_amount = this.priceFormat(Number(this.usdt_amount) * this.tetherPrice.buy_price);
+        this.lastChangedInput = LastChangedInputEnum.USDT
     },
     sendCode() {
       let phone_numberEn = this.convertPersian(this.phone_number)
@@ -199,9 +462,9 @@ export default {
           code: this.convertPersian(this.user_code)
         })
         .then(res => {
+          this.$store.commit('setUserProfile', res.data)
           this.$store.commit('setToken', res.data.token)
-          this.currentState = currentStateEnum.TETHER_AMOUNT
-          this.submitTetherRequest()
+          this.startTetherRequest()
         })
         .catch(err => {
           if (err.response) {
@@ -213,20 +476,21 @@ export default {
         })
     },
   },
+  created() {
+    if(this.userProfile) {
+      this.userProfileToEdit = Object.assign({}, this.userProfile)
+    }
+  },
   mounted() {
     if (process.browser) {
-
-
-    let preInvoiceAnime = lottie.loadAnimation({
-      container: document.getElementById('swapMoney-animation'), // the dom element that will contain the animation
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      animationData: this.swapMoney // the path to the animation json
-    })
-    preInvoiceAnime.play()
-
-    
+      let preInvoiceAnime = lottie.loadAnimation({
+        container: document.getElementById('swapMoney-animation'), // the dom element that will contain the animation
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        animationData: this.swapMoney // the path to the animation json
+      })
+      preInvoiceAnime.play()
     }
   },
 }

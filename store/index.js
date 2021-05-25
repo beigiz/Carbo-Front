@@ -5,18 +5,24 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export const state = () => ({
+    userProfile: null,
     loadingTetherPrice: true,
     tetherPrice: null,
     token: null,
 })
 
 export const getters = {
+    userProfile: (state) => state.userProfile,
     isAuthenticated: (state) => !!state.token,
+    token: (state) => state.token,
     loadingTetherPrice: (state) => state.loadingTetherPrice,
     tetherPrice: (state) => state.tetherPrice
 }
 
 export const mutations = {
+    setUserProfile(state, newData){
+        state.userProfile = newData
+    },
     // Just setting token on state from cookie
     setTokenWithoutSaveToCookie(state, token) {
         state.token = token
@@ -32,7 +38,6 @@ export const mutations = {
             }
             return hostName.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
         }
-        alert(getDomainName())
         this.$cookies.set('CarboExchangeUserToken', cookieValObject, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7,
@@ -53,12 +58,21 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit }, { req, $config }) {
-    let token = this.$cookies.get('CarboExchangeUserToken')
-    if (!!token) commit('setTokenWithoutSaveToCookie', token.token)
-      
     let tetherPrice = (await this.$axios.get('v1/core/trading-pair/usdt/irt/?format=json')).data
-    // console.log(tetherPrice)
     commit('setTetherPrice', tetherPrice)
+    
+    let tokenObject = this.$cookies.get('CarboExchangeUserToken')
+    if (!!tokenObject) {
+        let token = tokenObject.token;
+        commit('setTokenWithoutSaveToCookie', token)
+        let userProfile = (await this.$axios.get('v1/user_profile/user-profile/?format=json', {
+            headers: {
+                Authorization: 'Token ' + token
+            }
+        })).data
+        commit('setUserProfile', userProfile)
+    }
+    // console.log(tetherPrice)
     commit('setLoadingTetherPrice', false)
   },
 }

@@ -12,6 +12,50 @@ export default function ({
     },
 
     methods: {
+      priceFormat (priceStr) {
+          priceStr = String(priceStr) // double check
+          let result = ''
+          for (var i = priceStr.indexOf(".") != -1 ? priceStr.indexOf(".") : priceStr.length; i > 3; i -= 3) {
+              result = ',' + priceStr.slice(Math.max(i - 3, 0), i) + result
+          }
+          result = priceStr.slice(0, i) + result;
+          let afterFixedPoint = (priceStr.indexOf(".") != -1 ? priceStr.slice(priceStr.indexOf(".") + 1, priceStr.length) : null);
+          if(afterFixedPoint){
+              result += '.';
+              // var i = 0;
+              // while (i < afterFixedPoint.length) {
+              //     result += afterFixedPoint.slice(i, i + 3) + (i + 3 < afterFixedPoint.length ? ',' : '');
+              //     i += 3;
+              // }
+              result += afterFixedPoint;
+          }
+          return result
+      },
+      toEnglishNumber(str) {
+        return this.convertNumbersToEnglish(str)
+            .replace(/[^\d.-]/g, '') // for just keeping digits and dots.
+      },
+      convertNumbersToEnglish(str) {
+        return str.replace(new RegExp('۰', 'g'), '0')
+          .replace(new RegExp('۱', 'g'), '1')
+          .replace(new RegExp('۲', 'g'), '2')
+          .replace(new RegExp('۳', 'g'), '3')
+          .replace(new RegExp('۴', 'g'), '4')
+          .replace(new RegExp('۵', 'g'), '5')
+          .replace(new RegExp('۶', 'g'), '6')
+          .replace(new RegExp('۷', 'g'), '7')
+          .replace(new RegExp('۸', 'g'), '8')
+          .replace(new RegExp('۹', 'g'), '9')
+          .replace(new RegExp('٪', 'g'), '%')
+      },
+      cutNDigitAfterPrecision(str, n) {
+        let strEn = this.toEnglishNumber(str)
+        if(strEn.lastIndexOf('.') != -1) {
+          return strEn.substr(0, strEn.lastIndexOf('.') + n + 1);
+        } else {
+          return strEn
+        }
+      },
       convertPersian(str) {
         let persianNumbers = [
             /۰/g,

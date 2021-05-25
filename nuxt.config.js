@@ -59,9 +59,20 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.CARBO_EXCHANGE_baseUrl,
     proxyHeaders: false,
     credentials: false
+  },
+
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.CARBO_EXCHANGE_BROWSER_BASE_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.CARBO_EXCHANGE_BASE_URL,
+    }
   },
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
