@@ -183,8 +183,13 @@
 
         <template v-else-if="currentState == currentStateEnum.FINISHED">
           
-          <div class="price-box rounded-md px-4 pt-4 my-4 text-lg">
-            درخواست شما با موفقیت ثبت شد!
+          <div class="price-box rounded-md px-6 pt-4 my-4 text-lg">
+            <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
+              درخواست شما با موفقیت ثبت شد!
+            </template>
+            <template v-else>
+              درخواست شما با موفقیت ثبت شد و پس از تایید، در سریع ترین زمان ممکن واریز می شود
+            </template>
           </div>
           <div class="px-12">
             <div>کد رهگیری شما</div>
@@ -197,7 +202,7 @@
             <template v-else>
               <div>پشتیبانی واتساپ</div>
             </template>
-            <div class="mt-4"><a href="https://wa.me/+989120350075" style="color: blue; text-decoration: underline; font-size: 18px;">09120350075</a></div>
+            <div class="mt-4"><a href="https://wa.me/+989120350075" target="_blank" style="color: blue; text-decoration: underline; font-size: 18px;">09120350075</a></div>
           </div>
         </template>
       </div>
@@ -337,6 +342,11 @@ export default {
     startTetherRequest(){
       if(!this.toman_amount) {
         alert('لطفا مقدار درخواستی را وارد کنید')
+        return
+      }
+      if(this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY && this.usdt_amount > 1000){
+        alert('حداکثر 1000 تتر قابل خرید می باشد')
+        return
       }
       if(!this.isAuthenticated) {
         this.currentState = currentStateEnum.PHONE_NUMBER
