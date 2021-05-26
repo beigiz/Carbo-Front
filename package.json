@@ -16,6 +16,7 @@
     "node-sass": "^4.14.1",
     "nuxt": "^2.0.0",
     "sass-loader": "^8.0.2",
+    "vanilla-tilt": "^1.7.0",
     "vue-animejs": "^2.1.1",
     "vue-currency-filter": "^4.0.3"
   },

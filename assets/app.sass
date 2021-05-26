@@ -5,20 +5,87 @@ body
 
 .bg-g1
   background: rgb(222,168,144)
+  background: -webkit-linear-gradient(45deg, rgba(222,168,144,1) 0%, rgba(232,154,187,1) 50%, rgba(202,157,214,1) 100%)
+  background: -webkit-linear-gradient(45deg, rgba(222,168,144,1) 0%, rgba(232,154,187,1) 50%, rgba(202,157,214,1) 100%)
   background: linear-gradient(45deg, rgba(222,168,144,1) 0%, rgba(232,154,187,1) 50%, rgba(202,157,214,1) 100%)
 
 .bg-g2
-  background-image: linear-gradient(45deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)
+  background: -webkit-linear-gradient(45deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)
+  background: -webkit-linear-gradient(45deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)
+  background: linear-gradient(45deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)
+
+.bg-g3
+  background: -webkit-linear-gradient(to right, #B878EA 0%, #F3A1D6 50%, #d9abf3 100%)
+  background: -moz-linear-gradient(to right, #B878EA 0%, #F3A1D6 50%, #d9abf3 100%)
+  background: linear-gradient(to right, #B878EA 0%, #F3A1D6 50%, #d9abf3 100%)
+
+.gradient-text
+  background: #B878EA
+  background: -webkit-linear-gradient(to right, #B878EA 0%, #F3A1D6 50%, #d9abf3 100%)
+  background: -moz-linear-gradient(to right, #B878EA 0%, #F3A1D6 50%, #d9abf3 100%)
+  background: linear-gradient(to right, #B878EA 0%, #F3A1D6 50%, #d9abf3 100%)
+  -webkit-background-clip: text
+  -webkit-text-fill-color: transparent
 
 html 
   box-sizing: border-box
 
 
+.landing
+  background-image: url('../assets/img/landing-bg-3.png')
+  background-size: cover
+  &__intro
+    @apply flex justify-center items-start
+    &__logo
+      img
+        position: relative
+        // top: 5rem
+        width: 60%
+
+  &__card
+    // position: absolute!important
+    width: 80%
+    left: 10% 
+    right: 10%
+    // &__text
+
+@media (max-width: 800px)
+  .landing
+    &__card
+      width: 100%
+      left: 0!important
+      right: 0!important
+    &__intro
+      &__logo
+        img
+          width: 66%!important
+          margin: auto
+
+    
+
+.card
+  // box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5)
+  border-radius: 15px
+  background: rgba(255, 255, 255, 0.1)
+  overflow: hidden
+  display: flex
+  border-top: 1px solid rgba(255, 255, 255, 0.25)
+  border-left: 1px solid rgba(255, 255, 255, 0.25)
+  // border-right: 1px solid rgba(255, 255, 255, 0.25)
+  // border-bottom: 1px solid rgba(255, 255, 255, 0.25)
+  backdrop-filter: blur(7px)
+
 .ex-btn
   @apply rounded-md px-2 py-4
 
 .ex-input
+  @apply mb-3
   label
     @apply block uppercase tracking-wide text-right text-gray-700 text-xs font-bold mb-2
   input
-    @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500
+    @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight 
+    focus:outline-none focus:bg-white focus:border-gray-500
+
+.ex-input-large
+  input
+    @apply py-5 rounded-md
