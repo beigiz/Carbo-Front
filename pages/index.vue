@@ -492,10 +492,10 @@ export default {
       if(this.loading) {
         return
       }
-      this.loading = true
       let phone_numberEn = this.convertPersian(this.phone_number)
       let validation = /^(\0|0)?9\d{9}$/g
       if (phone_numberEn.match(validation)) {
+        this.loading = true
         this.$axios
           .post('v1/user_profile/send-code/', {
             phone_number: phone_numberEn
