@@ -30,28 +30,47 @@
 
         <template v-if="currentState == currentStateEnum.TETHER_AMOUNT">
           <div class="price-box rounded-md p-4 my-4 text-lg">
-            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? tetherPrice.sell_price : tetherPrice.buy_price) | currency}}</span> <span class="toman">تومان</span>
           </div>
 
           <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
             <div class="w-full ex-input">
               <label class="">می دهید (تومان)</label>
-              <input @keyup.enter="startTetherRequest" @keyup="tomanAmountUpdated" v-model="toman_amount" class="" id="grid-password" inputmode="numeric" placeholder="مبلغ">
+              <input @keyup.enter="startTetherRequest"
+                @keyup="tomanAmountUpdated"
+                :value="toman_amount"
+                @input="(e) => handleLiveInput(e, 'toman_amount')"
+                id="grid-password" inputmode="numeric" placeholder="مبلغ">
             </div>
             <div class="w-full ex-input">
               <label class="">می گیرید (تتر)</label>
-              <input @keyup.enter="startTetherRequest" @keyup="tetherAmountUpdated" v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر درخواستی">
+              <input @keyup.enter="startTetherRequest"
+                @keyup="tetherAmountUpdated"
+                :value="usdt_amount"
+                @input="(e) => handleLiveInput(e, 'usdt_amount')"
+                id="grid-password" inputmode="numeric"
+                placeholder="مقدار تتر درخواستی">
             </div>
           </template>
 
           <template v-else>
             <div class="w-full ex-input">
               <label class="">می دهید (تتر)</label>
-              <input @keyup.enter="startTetherRequest" @keyup="tetherAmountUpdated" v-model="usdt_amount" class="" id="grid-password" inputmode="numeric" placeholder="مقدار تتر">
+              <input @keyup.enter="startTetherRequest"
+                @keyup="tetherAmountUpdated"
+                :value="usdt_amount"
+                @input="(e) => handleLiveInput(e, 'usdt_amount')"
+                id="grid-password" inputmode="numeric"
+                placeholder="مقدار تتر">
             </div>
             <div class="w-full ex-input">
               <label class="">می گیرید (تومان)</label>
-              <input @keyup.enter="startTetherRequest" @keyup="tomanAmountUpdated" v-model="toman_amount" class="" id="grid-password" inputmode="numeric" placeholder="مبلغ درخواستی">
+              <input @keyup.enter="startTetherRequest"
+                @keyup="tomanAmountUpdated"
+                :value="toman_amount"
+                @input="(e) => handleLiveInput(e, 'toman_amount')"
+                id="grid-password" inputmode="numeric"
+                placeholder="مبلغ درخواستی">
             </div>
           </template>
 
@@ -283,6 +302,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       userProfileToEdit: null,
       ExchangeRequestTypeEnum,
       currentStateEnum,
@@ -354,6 +374,9 @@ export default {
       }
     },
     submitAccountInfo(){
+      if(this.loading) {
+        return
+      }
       if(!this.userProfileToEdit.card_number){
         alert('لطفا شماره کارت را وارد کنید')
         return
@@ -367,6 +390,7 @@ export default {
         this.currentState = currentStateEnum.ENTER_REQUEST_INFO
         return
       }
+      this.loading = true
       this.$axios
         .patch('v1/user_profile/user-profile/', {
           card_number: this.userProfileToEdit.card_number,
@@ -382,9 +406,19 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          if(err.response) {
+            alert(JSON.stringify(err.response.data))
+          } else {
+            alert('خطا در ارتباط با سرور')
+          }
+        }).finally(() => {
+          this.loading = false
         })
     },
     submitTetherRequestInfo(){
+      if(this.loading) {
+        return
+      }
       if(this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY) {
         if(!this.usdtWalletAddress) {
           alert('لطفا آدرس کیف پول را وارد کنید')
@@ -397,6 +431,7 @@ export default {
           return
         }
       }
+      this.loading = true
       let data = {
         trading_pair: this.tetherPrice.pk,
         from_amount: Number(this.toman_amount.replaceAll(',', '')),
@@ -416,6 +451,14 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          if(err.response) {
+            alert(JSON.stringify(err.response.data))
+          } else {
+            alert('خطا در ارتباط با سرور')
+          }
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     resetComponent(){
@@ -431,17 +474,25 @@ export default {
     tomanAmountUpdated(){
         const num = this.toEnglishNumber(String(this.toman_amount));
         this.toman_amount = this.priceFormat(num);
-        let str = String(Number(num) / Number(this.tetherPrice.sell_price))
+        let str = String(Number(num) / Number(
+          this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.tetherPrice.sell_price : this.tetherPrice.buy_price
+        ))
         this.usdt_amount = Number(this.cutNDigitAfterPrecision(str, 2));
         this.lastChangedInput = LastChangedInputEnum.IRT
     },
     tetherAmountUpdated(){
         let str = String(this.usdt_amount)
         this.usdt_amount = Number(this.cutNDigitAfterPrecision(str, 2));
-        this.toman_amount = this.priceFormat(Number(this.usdt_amount) * this.tetherPrice.buy_price);
+        this.toman_amount = this.priceFormat(Number(this.usdt_amount) * (
+          this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.tetherPrice.sell_price : this.tetherPrice.buy_price
+        ));
         this.lastChangedInput = LastChangedInputEnum.USDT
     },
     sendCode() {
+      if(this.loading) {
+        return
+      }
+      this.loading = true
       let phone_numberEn = this.convertPersian(this.phone_number)
       let validation = /^(\0|0)?9\d{9}$/g
       if (phone_numberEn.match(validation)) {
@@ -455,6 +506,14 @@ export default {
           })
           .catch(err => {
             console.log(err)
+            if(err.response) {
+              alert(JSON.stringify(err.response.data))
+            } else {
+              alert('خطا در ارتباط با سرور')
+            }
+          })
+          .finally(() => {
+            this.loading = false
           })
       } else if (phone_numberEn == '') {
         // phone number empty
@@ -466,6 +525,10 @@ export default {
     },
 
     checkCode() {
+      if(this.loading) {
+        return
+      }
+      this.loading = true
       this.$axios
         .post('v1/user_profile/verify-code/', {
           phone_number: this.convertPersian(this.phone_number),
@@ -477,12 +540,19 @@ export default {
           this.startTetherRequest()
         })
         .catch(err => {
-          if (err.response) {
-            console.log(err.response)
+          console.log(err)
+          if(err.response) {
             if (err.response.status == 403) {
               alert('کد وارد شده نادرست است')
+            } else {
+              alert(JSON.stringify(err.response.data))
             }
+          } else {
+            alert('خطا در ارتباط با سرور')
           }
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
   },
