@@ -12,6 +12,24 @@ export default function ({
     },
 
     methods: {
+      // vuejs v-model doesn't update Persian values until
+      // space is pressed on chrome mobile. this method is for
+      // fixing this problem
+      // see https://github.com/vuejs/vue/issues/8231
+      // and https://github.com/vuejs/vue/pull/9814
+      handleLiveInput (e, property, obj) {
+          const localObj = obj ? obj : this
+          if(e.isComposing){
+              // if button delete from mobile is pressed
+              if(e.target.value === ''){
+                  Vue.set(localObj, property, obj[property].slice(0, -1))
+              }else{
+                  Vue.set(localObj, property, e.target.value)
+              }
+          } else {
+              Vue.set(localObj, property, e.target.value)
+          }
+      },
       priceFormat (priceStr) {
           priceStr = String(priceStr) // double check
           let result = ''

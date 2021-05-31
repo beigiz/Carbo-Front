@@ -53,6 +53,21 @@ export default {
     'cookie-universal-nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+
+    ['@nuxtjs/sentry', {
+      dsn: process.env.NODE_ENV == 'production' ? process.env.CARBO_FRONTEND_SENTRY_DSN : null,
+      tracesSampleRate: 1.0,
+      vueOptions: {
+        tracing: true,
+        tracingOptions: {
+          hooks: [ 'mount', 'update' ],
+          timeout: 2000,
+          trackComponents: true
+        }
+      },
+      browserOptions: {}
+    }]
+
   ],
   /*
   ** Axios module configuration
