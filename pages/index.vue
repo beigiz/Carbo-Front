@@ -435,8 +435,8 @@ export default {
       this.loading = true
       let data = {
         trading_pair: this.tetherPrice.pk,
-        from_amount: Number(this.toman_amount.replaceAll(',', '')),
-        to_amount: this.usdt_amount,
+        from_amount: this.usdt_amount,
+        to_amount: Number(this.toman_amount.replaceAll(',', '')),
         type: this.ExchangeRequestType,
         description: this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.usdtWalletAddress : this.txId
       }
