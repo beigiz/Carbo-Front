@@ -1,7 +1,7 @@
 {
-  "name": "landingPage",
+  "name": "Carbo",
   "version": "1.0.0",
-  "description": "My fabulous Nuxt.js project",
+  "description": "Carbo Exchange",
   "author": "ali alibeigi",
   "private": true,
   "scripts": {
