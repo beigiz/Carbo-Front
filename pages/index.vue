@@ -425,42 +425,74 @@ export default {
           alert('لطفا آدرس کیف پول را وارد کنید')
           return
         }
+        this.loading = true
+        let data = {
+          trading_pair: this.tetherPrice.pk,
+          from_amount: this.usdt_amount,
+          to_amount: Number(this.toman_amount.replaceAll(',', '')),
+          type: this.ExchangeRequestType,
+          trc20_payout_address: this.usdtWalletAddress
+        }
+        this.$axios
+          .post(
+            this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? 
+            'v1/core/exchange/usdt/irt/buy/request/' :
+            'v1/core/exchange/request/create/'
+          , data,{
+            headers: {
+                Authorization: 'Token ' + this.$store.getters.token
+            }
+          })
+          .then(res => {
+            window.location = res.data.idpay_transaction.payment_url
+          })
+          .catch(err => {
+            console.log(err)
+            if(err.response) {
+              alert(JSON.stringify(err.response.data))
+            } else {
+              alert('خطا در ارتباط با سرور')
+            }
+          })
+          .finally(() => {
+            this.loading = false
+          })
       }
       if(this.ExchangeRequestType == ExchangeRequestTypeEnum.SELL) {
         if(!this.txId) {
           alert('لطفا txId تراکنش را وارد کنید')
           return
         }
+        this.loading = true
+        let data = {
+          trading_pair: this.tetherPrice.pk,
+          from_amount: this.usdt_amount,
+          to_amount: Number(this.toman_amount.replaceAll(',', '')),
+          type: this.ExchangeRequestType,
+          description: this.txId
+        }
+        this.$axios
+          .post('v1/core/exchange/request/create/', data,{
+            headers: {
+                Authorization: 'Token ' + this.$store.getters.token
+            }
+          })
+          .then(res => {
+            this.exchangeRequestResult = res.data
+            this.currentState = currentStateEnum.FINISHED
+          })
+          .catch(err => {
+            console.log(err)
+            if(err.response) {
+              alert(JSON.stringify(err.response.data))
+            } else {
+              alert('خطا در ارتباط با سرور')
+            }
+          })
+          .finally(() => {
+            this.loading = false
+          })
       }
-      this.loading = true
-      let data = {
-        trading_pair: this.tetherPrice.pk,
-        from_amount: this.usdt_amount,
-        to_amount: Number(this.toman_amount.replaceAll(',', '')),
-        type: this.ExchangeRequestType,
-        description: this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.usdtWalletAddress : this.txId
-      }
-      this.$axios
-        .post('v1/core/exchange/request/create/', data,{
-          headers: {
-              Authorization: 'Token ' + this.$store.getters.token
-          }
-        })
-        .then(res => {
-          this.exchangeRequestResult = res.data
-          this.currentState = currentStateEnum.FINISHED
-        })
-        .catch(err => {
-          console.log(err)
-          if(err.response) {
-            alert(JSON.stringify(err.response.data))
-          } else {
-            alert('خطا در ارتباط با سرور')
-          }
-        })
-        .finally(() => {
-          this.loading = false
-        })
     },
     resetComponent(){
       this.currentState = currentStateEnum.TETHER_AMOUNT
