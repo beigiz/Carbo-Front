@@ -30,7 +30,7 @@
 
         <template v-if="currentState == currentStateEnum.TETHER_AMOUNT">
           <div class="price-box rounded-md p-4 my-4 text-lg">
-            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? tetherPrice.sell_price : tetherPrice.buy_price) | currency}}</span> <span class="toman">تومان</span>
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? tetherPrice.buy_price : tetherPrice.sell_price) | currency}}</span> <span class="toman">تومان</span>
           </div>
 
           <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
@@ -85,7 +85,7 @@
 
         <template v-else-if="currentState == currentStateEnum.PHONE_NUMBER">
           <div class="price-box rounded-md p-4 my-4 text-lg">
-            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.buy_price : tetherPrice.sell_price | currency}}</span> <span class="toman">تومان</span>
           </div>
 
           <div class="w-full ex-input">
@@ -105,7 +105,7 @@
 
         <template v-else-if="currentState == currentStateEnum.OTP">
           <div class="price-box rounded-md p-4 my-4 text-lg">
-            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.buy_price : tetherPrice.sell_price | currency}}</span> <span class="toman">تومان</span>
           </div>
 
           <div class="w-full ex-input">
@@ -126,7 +126,7 @@
         <template v-else-if="currentState == currentStateEnum.ENTER_ACCOUNT_INFO">
 
           <div class="price-box rounded-md p-4 my-4 text-lg">
-            <span> قیمت فروش به ما</span> <span class="font-semibold text-xl" v-if="tetherPrice">{{ tetherPrice.buy_price }}</span> <span class="toman">تومان</span>
+            <span> قیمت فروش به ما</span> <span class="font-semibold text-xl" v-if="tetherPrice">{{ tetherPrice.sell_price }}</span> <span class="toman">تومان</span>
             <br />
             <span>شما <span style="color: green">{{ usdt_amount }}</span> تتر می دهید و <span style="color: green">{{ toman_amount }}</span> تومان می گیرید</span>
           </div>
@@ -151,7 +151,7 @@
         <template v-else-if="currentState == currentStateEnum.ENTER_REQUEST_INFO">
           
           <div class="price-box rounded-md p-4 mt-4 text-lg">
-            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.sell_price : tetherPrice.buy_price | currency}}</span> <span class="toman">تومان</span>
+            <span>{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? 'قیمت خرید از ما' : 'قیمت فروش به ما'}}: </span> <span class="font-semibold text-xl" v-if="tetherPrice">{{(ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? tetherPrice.buy_price : tetherPrice.sell_price | currency}}</span> <span class="toman">تومان</span>
             <br />
             <template v-if="ExchangeRequestType == ExchangeRequestTypeEnum.BUY">
               <span>شما <span style="color: green">{{ toman_amount }}</span> تومان می دهید و <span style="color: green">{{ usdt_amount }}</span> تتر می گیرید</span>
@@ -294,7 +294,7 @@ export default {
       if(!this.tetherPrice) {
         return 0
       }
-      return (this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? this.usdt_amount * this.tetherPrice.sell_price : this.usdt_amount * this.tetherPrice.buy_price 
+      return (this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY) ? this.usdt_amount * this.tetherPrice.buy_price : this.usdt_amount * this.tetherPrice.sell_price 
     },
   },
   components: {
@@ -433,11 +433,7 @@ export default {
           trc20_payout_address: this.usdtWalletAddress
         }
         this.$axios
-          .post(
-            this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? 
-            'v1/core/exchange/usdt/irt/buy/request/' :
-            'v1/core/exchange/request/create/'
-          , data,{
+          .post('v1/core/exchange/usdt/irt/buy/request/', data,{
             headers: {
                 Authorization: 'Token ' + this.$store.getters.token
             }
@@ -468,10 +464,11 @@ export default {
           from_amount: this.usdt_amount,
           to_amount: Number(this.toman_amount.replaceAll(',', '')),
           type: this.ExchangeRequestType,
-          description: this.txId
+          payout_card_number: this.userProfile.card_number,
+          transaction_hash: this.txId
         }
         this.$axios
-          .post('v1/core/exchange/request/create/', data,{
+          .post('v1/core/exchange/usdt/irt/sell/request/', data,{
             headers: {
                 Authorization: 'Token ' + this.$store.getters.token
             }
@@ -507,7 +504,7 @@ export default {
         const num = this.toEnglishNumber(String(this.toman_amount));
         this.toman_amount = this.priceFormat(num);
         let str = String(Number(num) / Number(
-          this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.tetherPrice.sell_price : this.tetherPrice.buy_price
+          this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.tetherPrice.buy_price : this.tetherPrice.sell_price
         ))
         this.usdt_amount = Number(this.cutNDigitAfterPrecision(str, 2));
         this.lastChangedInput = LastChangedInputEnum.IRT
@@ -516,7 +513,7 @@ export default {
         let str = String(this.usdt_amount)
         this.usdt_amount = Number(this.cutNDigitAfterPrecision(str, 2));
         this.toman_amount = this.priceFormat(Number(this.usdt_amount) * (
-          this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.tetherPrice.sell_price : this.tetherPrice.buy_price
+          this.ExchangeRequestType == ExchangeRequestTypeEnum.BUY ? this.tetherPrice.buy_price : this.tetherPrice.sell_price
         ));
         this.lastChangedInput = LastChangedInputEnum.USDT
     },

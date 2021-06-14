@@ -65,12 +65,18 @@ export const actions = {
     if (!!tokenObject) {
         let token = tokenObject.token;
         commit('setTokenWithoutSaveToCookie', token)
-        let userProfile = (await this.$axios.get('v1/user_profile/user-profile/?format=json', {
-            headers: {
-                Authorization: 'Token ' + token
-            }
-        })).data
-        commit('setUserProfile', userProfile)
+        try {
+            let userProfile = (await this.$axios.get('v1/user_profile/user-profile/?format=json', {
+                headers: {
+                    Authorization: 'Token ' + token
+                }
+            })).data
+            commit('setUserProfile', userProfile)
+        } catch (e) {
+            commit('clearToken')
+            console.log('hi')
+            console.log(e)
+        }
     }
     // console.log(tetherPrice)
     commit('setLoadingTetherPrice', false)
