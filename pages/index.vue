@@ -5,7 +5,7 @@
     <ul class="flex-1 bg-white mr-4 px-4 shadow-sm py-2 rounded-md">
       <li v-for="(link , i) in links" :key="i" class="py-2 px-4">{{link.name}}</li>
     </ul>
-    <div class=""><img src="@/assets/img/logo.png" alt=""></div>
+    <div @click="$toast(msg, 'success', 4000)" class=""><img src="@/assets/img/logo.png" alt=""></div>
   </nav>
   <section dir="rtl" class="main-section px-24">
 
@@ -256,6 +256,7 @@
 <script>
 import Logo from '~/components/Logo.vue'
 import lottie from 'lottie-web'
+import Vue from 'vue'
 import swapMoney from '~/assets/img/43059-bitcoin-trade.json'
 const currentStateEnum = Object.freeze({
   TETHER_AMOUNT: 0,
@@ -302,6 +303,7 @@ export default {
   },
   data() {
     return {
+      msg: 'اطلاعات وارد شده صحیح نمی باشد لطفا اطلاع صحیح وارد کنید',
       loading: false,
       userProfileToEdit: null,
       ExchangeRequestTypeEnum,
@@ -336,6 +338,7 @@ export default {
       window.onload = (event) => {
         console.log('page is fully loaded')
       }
+     
     }
   },
 
@@ -592,6 +595,9 @@ export default {
   },
   mounted() {
     if (process.browser) {
+
+      
+
       let preInvoiceAnime = lottie.loadAnimation({
         container: document.getElementById('swapMoney-animation'), // the dom element that will contain the animation
         renderer: 'svg',

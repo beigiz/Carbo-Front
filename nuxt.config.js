@@ -44,6 +44,10 @@ export default {
       src: '@/plugins/vue-currency',
       mode: 'client'
     },
+    {
+      src: '@/plugins/utils',
+      mode: 'client'
+    },
   ],
   /*
   ** Nuxt.js modules
